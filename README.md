@@ -20,23 +20,21 @@ Repository hier auf öffentlich, vor allem für unseren aktuellen Kurs (Grüße!
 
 ## Changelog
 **29.04.2020**
-    * docker rausgenommen
-    * umbau/anpassung apa6 
+* docker rausgenommen
+* umbau/anpassung apa6 
 
 **28.04.2020**
-    * aufräumen
-    * zusammenfassen
-
-    
-    
-
-
-
-
-# *****************************************
+* aufräumen
+* zusammenfassen
+  
+.  
+.  
+.  
+.  
+  
 # Alte Readme von https://github.com/andygrunwald/FOM-LaTeX-Template/blob/master/README.md 
-# *****************************************
-# *****************************************
+  
+  
 # LaTeX-Vorlage für die FOM Hochschule für Oekonomie & Management
 
 [![Build Status](https://travis-ci.org/andygrunwald/FOM-LaTeX-Template.svg?branch=master)](https://travis-ci.org/andygrunwald/FOM-LaTeX-Template)
