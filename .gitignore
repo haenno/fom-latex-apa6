@@ -1,0 +1,23 @@
+.DS_Store
+__latexindent_temp.tex
+
+# Diese Dateien werden beim kompilieren erzeugt: 
+*.bbl
+*.blg
+*.aux
+*.bcf
+*.ilg
+*.lof
+*.log
+*.lot
+*.nlo
+*.nls*
+*.out
+*.toc
+*.run.xml
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+
+# IDEs
+.texpadtmp/
