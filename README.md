@@ -30,20 +30,8 @@ Repository hier auf öffentlich, vor allem für unseren aktuellen Kurs (Grüße!
 .  
 .  
 .  
-.  
-<<<<<<< HEAD
-.  
-.  
-  
+.    
 # Alte Readme von https://github.com/andygrunwald/FOM-LaTeX-Template/blob/master/README.md 
-.  
-.  
-=======
-  
-# Alte Readme von https://github.com/andygrunwald/FOM-LaTeX-Template/blob/master/README.md 
-  
-  
->>>>>>> 737a400eca99fc1185277b421e528aa79401b632
 # LaTeX-Vorlage für die FOM Hochschule für Oekonomie & Management
 
 [![Build Status](https://travis-ci.org/andygrunwald/FOM-LaTeX-Template.svg?branch=master)](https://travis-ci.org/andygrunwald/FOM-LaTeX-Template)
