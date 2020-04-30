@@ -149,8 +149,8 @@
 
 	%\DeclareFieldFormat[online]{autor}{#1\nopunct{autor}} % Ohne Punkt am Ende -funktionslos!!- TODO: Punkt entfernen
 
-	\DeclareFieldFormat[online]{url}{Verfügbar unter\space \url{#1}} % Anpassung @online Text vor URL
-	\renewbibmacro*{url+urldate}{\usebibmacro{url}\ifentrytype{online}\setunit*{\addspace}\usebibmacro{urldate}} % Fehler: Hiermit tauchen bei allen anderen Arten * am Ende auf!
+	%\DeclareFieldFormat[online]{url}{Verfügbar unter\space \url{#1}} % Anpassung @online Text vor URL
+	%\renewbibmacro*{url+urldate}{\usebibmacro{url}\ifentrytype{online}\setunit*{\addspace}\usebibmacro{urldate}} % Fehler: Hiermit tauchen bei allen anderen Arten * am Ende auf!
 
 %%%% APA ENDE
 
