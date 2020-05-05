@@ -102,17 +102,17 @@
 }
 
 %%%% APA START / Biblatex
-%% Zitierung und Literaturverzeichnis nach APA:
-% Prof wünscht APA. Andere hatten das Problem auch schon...
+%% Zitierung und Literaturverzeichnis nach APA--Prof wünscht APA (https://gitlab.com/haenno/fom-latex-apa6/-/blob/master/backup/hinweise-zur-apa.pdf). Andere hatten das Problem auch schon...
 % https://tex.stackexchange.com/questions/452228/modifying-bibliography-with-biblatex-biber-apa-style-locationpublisherdoi 
 % https://texwelt.de/fragen/2686/wie-formatiere-ich-ein-bibtex-literaturverzeichnis-fur-eine-deutschsprachige-ausgabe-nach-den-regeln-der-apa
-
+% https://tex.stackexchange.com/questions/452032/setting-maxcitenames-for-biblatex-apa (credit dahin für Lösung um die anzahl und wiederholungsnennungen, auch an den entdecker DMiu)
+% https://golatex.de/and-anstatt-und-bei-zitationen-t17576,start,10.html 
 
 % Nötige Daten für Zitationen im Textteil: Nachnamen, Erscheinungsjahre, Besonderheiten: 
-%  - Bei mehr als 6 Autoren: immer nur 1. Autor und "et al."
-%  - Bei 3 bis 6 Autoren: Beim 1. nennen alle Nachnamen, danach nur noch 1. Autor und "et al."
-%  - Bei zwei Autoren, Nennung beider
-%  - Trennzeichen: Immer Komma, letzte Nachnamen mit "und", bsp: (Müller, Meier, Weber und Schmidt, 2018)
+%  - Bei mehr als 6 Autoren: immer nur 1. Autor und "et al."   erl.
+%  - Bei 3 bis 6 Autoren: Beim 1. nennen alle Nachnamen, danach nur noch 1. Autor und "et al." erl.
+%  - Bei bis zu zwei Autoren, immer Nennung aller bzw. beider erl.
+%  - Trennzeichen: Immer Komma, letzte Nachnamen mit "und", bsp: (Müller, Meier, Weber und Schmidt, 2018) TODO!
 
 % Nötige Daten für Literaturverzeichnis:
 % -  Internetquellen: (@online) 	Name Herausgeber Seite (analog Autor), 	Erscheinungsjahr, URL, Abrufdatum-URL
@@ -121,23 +121,89 @@
 % Weitere möglich, bisher keine Nutzung: Dissertationen (@phdthesis), Herausgeberwerk (@incollection), Buchkapitel- oder beitrag(@inbook)
 
 \usepackage[
-    style           = apa6,
-    citestyle       = authoryear,
-    citetracker     = false,    
+    style           = apa6, 
     uniquelist      = false,    
-    sorting         = nyt,
-    sortcites       = true,
-    autocite        = inline,
-    maxbibnames     = 99,
     maxcitenames    = 6,
     backend         = biber,
-    bibliography    = totoc,
-    isbn            = true,
-    doi             = true,
-    urldate         = short
-	]{biblatex}
+	urldate         = short,
+	uniquename 		= true,
+	language		= ngerman
+	]{biblatex} 
+		
+	%% START Block für Funktion (1. Nennung von 2-6 Autoren: Alle Namen, danach nur noch 1. Name + et.al)
+	\usepackage{lmodern} 
+	\makeatletter
+	\newcommand{\apamaxcitenames}{6}
+	\DeclareNameFormat{labelname}{%
+	  % First set the truncation point
+	  \ifthenelse{\value{uniquelist}>1}
+		{\numdef\cbx@min{\value{uniquelist}}}
+		{\numdef\cbx@min{\value{minnames}}}%
+	  % Always print the first name and the second if there are only two since
+	  % "et al" must always be plural
+	  \ifboolexpr{test {\ifnumcomp{\value{listcount}}{=}{1}}
+				  or test {\ifnumcomp{\value{listtotal}}{=}{2}}}
+		{\usebibmacro{labelname:doname}%
+		  {\namepartfamily}%
+		  {\namepartfamilyi}%
+		  {\namepartgiven}%
+		  {\namepartgiveni}%
+		  {\namepartprefix}%
+		  {\namepartprefixi}%
+		  {\namepartsuffix}%
+		  {\namepartsuffixi}}
+		% We are looking at name >=3
+		% If the list is 6 or more names or we have seen citation before, potential truncation
+		{\ifboolexpr{test {\ifnumcomp{\value{listtotal}}{>}{\apamaxcitenames}}
+					 or test {\ifciteseen}}
+		 % Less than the truncation point, print normally
+		 {\ifnumcomp{\value{listcount}}{<}{\cbx@min + 1}
+		   {\usebibmacro{labelname:doname}%
+			 {\namepartfamily}%
+			 {\namepartfamilyi}%
+			 {\namepartgiven}%
+			 {\namepartgiveni}%
+			 {\namepartprefix}%
+			 {\namepartprefixi}%
+			 {\namepartsuffix}%
+			 {\namepartsuffixi}}
+		   {}%
+		  % At potential truncation point ...
+		  \ifnumcomp{\value{listcount}}{=}{\cbx@min + 1}
+			% but enforce plurality of et al - only truncate here if there is at
+			% least one more element after the current potential truncation point
+			% so that "et al" covers at least two elements.
+			{\ifnumcomp{\value{listcount}}{<}{\value{listtotal}}
+			  {\printdelim{andothersdelim}\bibstring{andothers}}
+			  {\usebibmacro{labelname:doname}%
+				{\namepartfamily}%
+				{\namepartfamilyi}%
+				{\namepartgiven}%
+				{\namepartgiveni}%
+				{\namepartprefix}%
+				{\namepartprefixi}%
+				{\namepartsuffix}%
+				{\namepartsuffixi}}}
+			{}%
+		  % After truncation point, do not print name
+		  \ifnumcomp{\value{listcount}}{>}{\cbx@min + 1}
+		   {\relax}%
+		   {}}%
+		 % We are looking at name >=3
+		 % Name list is < 6 names or we haven't seen this citation before, print normally
+		 {\usebibmacro{labelname:doname}%
+		   {\namepartfamily}%
+		   {\namepartfamilyi}%
+		   {\namepartgiven}%
+		   {\namepartgiveni}%
+		   {\namepartprefix}%
+		   {\namepartprefixi}%
+		   {\namepartsuffix}%
+		   {\namepartsuffixi}}}}
+	\makeatother 
+	\DeclareLanguageMapping{ngerman}{ngerman-apa}
+	%% ENDE Block für Funktion (1. Nennung von 2-6 Autoren: Alle Namen, danach nur noch 1. Name + et.al)
 	
-
 	\hypersetup{hidelinks}  %Grüne Links auf Literaturverz. unterdrücken.
 	\renewcommand*{\nameyeardelim}{\addcomma\space} % Bei Zitaten im Text Komma einfügen zw. Name und Jahr
 	
@@ -147,11 +213,11 @@
 	\DeclareFieldFormat[online]{urldate}{[#1\printfield{urldate}].} % Anpassung @online Bibl: Datum in eckigen Klammern ans Ende
 	\DeclareFieldFormat[online]{title}{\mkbibemph{#1}} %Titel Kursiv
 
-	%\DeclareFieldFormat[online]{autor}{#1\nopunct{autor}} % Ohne Punkt am Ende -funktionslos!!- TODO: Punkt entfernen
+	\DeclareFieldFormat[online]{autor}{#1\nopunct{autor}} % 'Autor/online' Ohne Punkt am Ende -leider funktionslos!!- TODO: Punkt entfernen?
 
-	%\DeclareFieldFormat[online]{url}{Verfügbar unter\space \url{#1}} % Anpassung @online Text vor URL
-	%\renewbibmacro*{url+urldate}{\usebibmacro{url}\ifentrytype{online}\setunit*{\addspace}\usebibmacro{urldate}} % Fehler: Hiermit tauchen bei allen anderen Arten * am Ende auf!
-
+	\DeclareFieldFormat[online]{url}{Verfügbar unter\space \url{#1}} % Anpassung @online Text vor URL
+	\renewbibmacro{url+urldate}{\usebibmacro{url}\ifentrytype{online}\setunit*{\addspace}\usebibmacro{urldate}} % Fehler: Hiermit tauchen bei allen anderen Arten * am Ende auf! TODO: Weg mit den Sternchen?
+	
 %%%% APA ENDE
 
 \addbibresource{literatur.bib} %Bib-Datei einbinden
@@ -509,52 +575,35 @@ Sortierung eines solchens Namens im Literaturverzeichnis einen \enquote{sortkey}
 
 \subsubsection{APA Richtlinien}
 
-Einige Doezenten verlagen die Zitierungen und das Literaturverzeichnis nach den APA Richtlininen. Daher nun ein ganzer Block an Test-Zitaten... (\cite{Belastingdienst}) und \cite{Decker2009} sowie \citeyear{Belastingdienst} sowie \citeyear{Decker2009}.
-
-Außerdem gibt es \parencite{Wiederhofer2017} und \parencite{Decker2009} sowie \citeauthor{Wiederhofer2017} und \citeauthor{Lucke2018hrsg}.
-
-Weiter noch textcite mit \textcite{FOM} und \textcite{Wiederhofer2017} sowie \textcite{Decker2009}. Darin sollten mehrere Autoren mit dem Wort 'und' verbunden sein. 
-
-Auch mehrere Autoren sind möglich APA konform zu bennen mit \parencite{Balzert7,Decker2009,Wiederhofer2017}.
-
-Hier noch versuche mit Seitenzahlen: Wiedenhofer z.B: \parencite[5]{Wiederhofer2017}.
-
-Es fehlt noch das Komma zwischen dem Nam en und dem Jahr. Noch ein versuch, hier mit Beckert \citeauthor{Beckert3}. 
-Nun tests mit Struktur:\\
-Sieben Autoren mit cite \cite{Balzert7}\\
-mit textcite \textcite{Balzert7}\\
-und mit parenite \parencite{Balzert7}\\
-außerdem nur mit citeauthor \citeauthor{Balzert7} und citeyear \citeyear{Balzert7}.\\
+Einige Doezenten verlagen die Zitierungen und das Literaturverzeichnis nach den APA Richtlininen. Daher nun ein ganzer Block an Test-Zitaten...\\
 \\
-Drei Autoren mit cite \cite{Beckert3}\\
-mit textcite \textcite{Beckert3}\\
-und mit parenite \parencite{Beckert3}\\
-außerdem nur mit citeauthor \citeauthor{Beckert3} und citeyear \citeyear{Beckert3}.\\
+Varianten:\\
 \\
-Drei Autoren und 2. Aufruf mit cite \cite{Beckert3}\\
-mit textcite \textcite{Beckert3}\\
-und mit parenite \parencite{Beckert3}\\
-außerdem nur mit citeauthor \citeauthor{Beckert3} und citeyear \citeyear{Beckert3}.\\
+Ein Autor: \\
+erste Nennung: Mit Parencite \parencite{Beckert1}, und textcite \textcite{Beckert1} sowie citeauthor \citeauthor{Beckert1} und citeyear \citeyear{Beckert1}. \\
+zweite Nennung: Mit Parencite \parencite{Beckert1}, und textcite \textcite{Beckert1} sowie citeauthor \citeauthor{Beckert1} und citeyear \citeyear{Beckert1}. \\
 \\
-Zwei Autoren mit cite \cite{Tanenbaum2}\\
-mit textcite \textcite{Tanenbaum2}\\
-und mit parenite \parencite{Tanenbaum2}\\
-außerdem nur mit citeauthor \citeauthor{Tanenbaum2} und citeyear \citeyear{Tanenbaum2}.\\
+Zwei Autoren: \\
+erste Nennung: Mit Parencite \parencite{Tanenbaum2}, und textcite \textcite{Tanenbaum2} sowie citeauthor \citeauthor{Tanenbaum2} und citeyear \citeyear{Tanenbaum2}. \\
+zweite Nennung:  Mit Parencite \parencite{Tanenbaum2}, und textcite \textcite{Tanenbaum2} sowie citeauthor \citeauthor{Tanenbaum2} und citeyear \citeyear{Tanenbaum2}. \\
 \\
-Ein Autor mit cite \cite{Beckert1}\\
-mit textcite \textcite{Beckert1}\\
-und mit parenite \parencite{Beckert1}\\
-außerdem nur mit citeauthor \citeauthor{Beckert1} und citeyear \citeyear{Beckert1}.\\
+Drei  Autoren: \\
+erste Nennung: Mit Parencite \parencite{Beckert3}, und textcite \textcite{Beckert3} sowie citeauthor \citeauthor{Beckert3} und citeyear \citeyear{Beckert3}. \\
+zweite Nennung: Mit Parencite \parencite{Beckert3}, und textcite \textcite{Beckert3} sowie citeauthor \citeauthor{Beckert3} und citeyear \citeyear{Beckert3}. \\
 \\
+Fünf  Autoren: \\
+erste Nennung: Mit Parencite \parencite{Mueller5}, und textcite \textcite{Mueller5} sowie citeauthor \citeauthor{Mueller5} und citeyear \citeyear{Mueller5}. \\
+zweite Nennung: Mit Parencite \parencite{Mueller5}, und textcite \textcite{Mueller5} sowie citeauthor \citeauthor{Mueller5} und citeyear \citeyear{Mueller5}. \\
 \\
+Sechs  Autoren: \\
+erste Nennung: Mit Parencite \parencite{Schmidt6}, und textcite \textcite{Schmidt6} sowie citeauthor \citeauthor{Schmidt6} und citeyear \citeyear{Schmidt6}. \\
+zweite Nennung: Mit Parencite \parencite{Schmidt6}, und textcite \textcite{Schmidt6} sowie citeauthor \citeauthor{Schmidt6} und citeyear \citeyear{Schmidt6}. \\
 \\
-Außerdem noch ein Aritkel mit Seitenzahlen\\
-Sieben Autoren mit cite \cite{Wiederhofer2017}\\
-mit textcite \textcite{Wiederhofer2017}\\
-und mit parenite \parencite{Wiederhofer2017}\\
-außerdem nur mit citeauthor \citeauthor{Wiederhofer2017} und citeyear \citeyear{Wiederhofer2017}.\\
-
-
+Sieben Autoren: \\
+erste Nennung: Mit Parencite \parencite{Balzert7}, und textcite \textcite{Balzert7} sowie citeauthor \citeauthor{Balzert7} und citeyear \citeyear{Balzert7}. \\
+zweite Nennung: Mit Parencite \parencite{Balzert7}, und textcite \textcite{Balzert7} sowie citeauthor \citeauthor{Balzert7} und citeyear \citeyear{Balzert7}. \\
+\\
+Abschließend noch mehrere Quellen \parencite{Beckert3,Mueller5,Beckert1}.
 
 \subsection{Abkürzungen}
 Abkürzungen werden mithilfe des Pakets Acronym eingebunden. Alle Abkürzungen sollten in der Datei acronyms.tex mithilfe des \begin{verbatim}
