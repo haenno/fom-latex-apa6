@@ -204,6 +204,9 @@
 	\DeclareLanguageMapping{ngerman}{ngerman-apa}
 	%% ENDE Block für Funktion (1. Nennung von 2-6 Autoren: Alle Namen, danach nur noch 1. Name + et.al)
 	
+	\DeclareDelimFormat*{finalnamedelim}{\addspace\bibstring{and}\space} % In Parencite von "&" auf "und" ändern
+	\DeclareDelimFormat*{finalnamedelim:apa:family-given}{\addspace\bibstring{and}\space}
+
 	\hypersetup{hidelinks}  %Grüne Links auf Literaturverz. unterdrücken.
 	\renewcommand*{\nameyeardelim}{\addcomma\space} % Bei Zitaten im Text Komma einfügen zw. Name und Jahr
 	
