@@ -19,6 +19,14 @@ Läuft jeweils unter **Windows mit [Miktex](https://miktex.org/download)** und u
 Repository hier auf öffentlich, vor allem für unseren aktuellen Kurs (Grüße!).
 
 ## Changelog
+
+**bis 09.05.2020**
+* weiterer umbau/anpassung apa6 nach Muster/Anforderung LMU https://gitlab.com/haenno/fom-latex-apa6/-/blob/master/backup/hinweise-zur-apa.pdf
+* verkürzen von zitationen bei 2. nennung unter bedinungen
+* genaue formatierung LiteraturVerz. übernommen
+* dank an DaMiu für tips!
+
+
 **29.04.2020**
 * docker rausgenommen
 * umbau/anpassung apa6 

@@ -102,16 +102,20 @@
 }
 
 %%%% APA START / Biblatex
-%% Zitierung und Literaturverzeichnis nach APA--Prof wünscht APA (https://gitlab.com/haenno/fom-latex-apa6/-/blob/master/backup/hinweise-zur-apa.pdf). Andere hatten das Problem auch schon...
+%% Zitierung und Literaturverzeichnis nach APA6 der LMU
+%% ---> Prof. wünscht APA6 nach LMU PDF Besipielen https://gitlab.com/haenno/fom-latex-apa6/-/blob/master/backup/hinweise-zur-apa.pdf
+% Teillösungen von hier... 
 % https://tex.stackexchange.com/questions/452228/modifying-bibliography-with-biblatex-biber-apa-style-locationpublisherdoi 
 % https://texwelt.de/fragen/2686/wie-formatiere-ich-ein-bibtex-literaturverzeichnis-fur-eine-deutschsprachige-ausgabe-nach-den-regeln-der-apa
-% https://tex.stackexchange.com/questions/452032/setting-maxcitenames-for-biblatex-apa (credit dahin für Lösung um die anzahl und wiederholungsnennungen, auch an den entdecker DMiu)
+% https://tex.stackexchange.com/questions/452032/setting-maxcitenames-for-biblatex-apa (credit dahin für Lösung um die anzahl und wiederholungsnennungen, auch an den entdecker DaMiu)
+% https://tex.stackexchange.com/questions/526434/edit-biblatex-apa-style  Lösung Punkt hinter OnlineQuellen entf.  nach Tip, DaMiu 
 
-% Nötige Daten für Literaturverzeichnis:
-% -  Internetquellen: (@online) 	Name Herausgeber Seite (analog Autor), 	Erscheinungsjahr, URL, Abrufdatum-URL
+%% Literaturverzeichnis entsprechend abrufen mit:
+% -  Internetquellen: (immer als @misc nicht @online!) 	Name Herausgeber Seite (analog Autor), 	Erscheinungsjahr, URL, Abrufdatum-URL
 % -  Buch:(@book)				 Autoren,			 Erscheinungsjahr, Titel, ggfls. Hinweis auf Auflage/Band, Verlagsort, Verlagsname
 % -  Zeitschriftenartikel(@article)   Autoren,			 Erscheinungsjahr, Titel des Artikel, Titel der Zeitschrift, Ausgabe mit Band- ggfls. Heftnummer, Seitenzahl(en)
-% Weitere möglich, bisher keine Nutzung: Dissertationen (@phdthesis), Herausgeberwerk (@incollection), Buchkapitel- oder beitrag(@inbook)
+% -  Weiter auch  möglich:, Herausgeberwerk (@incollection) und  Buchkapitel- oder beitrag(@inbook)
+% (ungetestet bisher : Dissertationen (@phdthesis))
 
 \usepackage[
     style           = apa6, 
@@ -185,21 +189,15 @@
 	%% ENDE Block für Funktion (1. Nennung von 2-6 Autoren: Alle Namen, danach nur noch 1. Name + et.al)
 	
 	\DeclareDelimFormat*{finalnamedelim}{\addspace\bibstring{and}\space} % In Parencite von "&" auf "und" ändern
-	
 	\hypersetup{hidelinks}  %Grüne Links auf Literaturverz. unterdrücken.
-%	\renewcommand*{\nameyeardelim}{\addcomma\space} % Bei Zitaten im Text Komma einfügen zw. Name und Jahr %% RAUS, kommt mit apa6 scheinbar sowieso rein
-	
 	\setlength\bibitemsep{1.3ex} % Abstände im Literaturverzeichnis erhöhen
 	\setlength\bibnamesep{1.0ex}
 	\AtBeginBibliography{\singlespacing} % Zeilenabstand im Literaturverzeichnis ist Einzeilig - siehe Leitfaden S. 14
-
-	\DeclareFieldFormat[online]{title}{\mkbibemph{#1}} %Titel Kursiv
-	\DeclareFieldFormat[online]{author}{#1\nopunct{author}} % 'Autor/online' Ohne Punkt am Ende -leider funktionslos!!- TODO: Punkt entfernen?
-
-	\DeclareFieldFormat[online]{urldate}{[#1\printfield{urldate}].} % Anpassung @online Bibl: Datum in eckigen Klammern ans Ende
-	\DeclareFieldFormat[online]{url}{Verfügbar unter\space \url{#1}} % Anpassung @online Text vor URL
-	\renewbibmacro{url+urldate}{\usebibmacro{url}\ifentrytype{online}\setunit*{\addspace}\usebibmacro{urldate}} % Fehler: Hiermit tauchen bei allen anderen Arten * am Ende auf! TODO: Weg mit den Sternchen?
-	
+	\urlstyle{same} %Standard-Font für Link anstelle der "Schreibmaschinenschrift"
+	\DeclareFieldFormat[misc]{urldate}{[#1\printfield{urldate}].} 	% Anpassung @online + @misc Bibl: Datum in eckigen Klammern ans Ende
+	\DeclareFieldFormat[misc]{title}{\mkbibemph{#1}} %Anpassung @online + @misc Titel Kursiv	
+	\DeclareFieldFormat[misc]{url}{Verfügbar unter\space \url{#1}} 	%Anpassung @online + @misc Text vor URL
+	\renewbibmacro*{url+urldate}{\usebibmacro{url}\setunit{\addspace}\usebibmacro{urldate}}  % URL vor Abrufdatum setzen + getrennte Wörter "Verfügbar" und "Unter" entfernen
 %%%% APA ENDE
 
 \addbibresource{literatur.bib} %Bib-Datei einbinden
@@ -557,8 +555,9 @@ Sortierung eines solchens Namens im Literaturverzeichnis einen \enquote{sortkey}
 
 \subsubsection{APA Richtlinien}
 
-Einige Doezenten verlagen die Zitierungen und das Literaturverzeichnis nach den APA Richtlininen. Daher nun ein ganzer Block an Test-Zitaten...\\
-\\
+Einige Doeznten verlagen die Zitierungen und das Literaturverzeichnis nach den 
+ APA Richtlininen. Daher nun ein ganzer Block an Test-Zitaten. \\
+
 Varianten:\\
 \\
 Ein Autor: \\
@@ -655,33 +654,32 @@ Wünsche Euch allen viel Erfolg für das 7. Semester und bei der Erstellung der 
 		\end{appendices}
 		\addtocontents{toc}{\protect\setcounter{tocdepth}{2}}
 
-%% Lösung Punkt hinter OnlineQuellen entf.  nach Tip, DaMiu und % https://tex.stackexchange.com/questions/526434/edit-biblatex-apa-style
 \newpage % Literaturverzeichnis
 
 % Im Literaturverzeichnis "und" wieder durch "&" ersetzen	
 	\DeclareDelimFormat*{finalnamedelim}{\addspace\&\space}
 
-% Punkt hinter und vor der Jahreszahl entfernen	
-\renewbibmacro*{author}{%
- \printtext{%
-  \ifnameundef{author}
-    {\usebibmacro{labeltitle}}
-    {\printnames[apaauthor][-\value{listtotal}]{author}%
-     \setunit*{\addspace}%
-     \printfield{nameaddon}%
-     \ifnameundef{with}
-       {}
-       {\setunit{}\addspace\mkbibparens{\printtext{\bibstring{with}\addspace}%
-        \printnames[apaauthor][-\value{listtotal}]{with}}
-        \setunit*{\addspace}}}%
-		% \newunit\newblock%
-		\usebibmacro{labelyear+extradate}}}
-		\printbibliography[title=Literaturverzeichnis]
-	\newpage
+% Punkt hinter und vor der Jahreszahl entfernen	- Wichtig für Quell-Arten wie misc und online -- Sonst ein überflüssiger Punkt im LitVerz.
+	\renewbibmacro*{author}{%
+	\printtext{%
+	\ifnameundef{author}
+	{\usebibmacro{labeltitle}}
+	{\printnames[apaauthor][-\value{listtotal}]{author}%
+	\setunit*{\addspace}%
+	\printfield{nameaddon}%
+	\ifnameundef{with}
+	{}
+	{\setunit{}\addspace\mkbibparens{\printtext{\bibstring{with}\addspace}%
+	\printnames[apaauthor][-\value{listtotal}]{with}}
+	\setunit*{\addspace}}}%
+	% \newunit\newblock%
+	\usebibmacro{labelyear+extradate}}}
 
+\printbibliography[heading=bibintoc,title=Literaturverzeichnis]
+
+\newpage % Ehrenwörtliche Erklärung
 \pagenumbering{gobble} % Keine Seitenzahlen mehr
-
-\section*{Ehrenwörtliche Erklärung} % Ehrenwörtliche Erklärung
+\section*{Ehrenwörtliche Erklärung} 
 	Hiermit versichere ich, dass die vorliegende Arbeit von mir selbstständig und ohne unerlaubte Hilfe angefertigt worden ist, insbesondere dass ich alle Stellen, die wörtlich oder annähernd wörtlich aus Veröffentlichungen entnommen sind, durch Zitate als solche gekennzeichnet habe. Ich versichere auch, dass die von mir eingereichte schriftliche Version mit der digitalen Version übereinstimmt. Weiterhin erkläre ich, dass die Arbeit in gleicher oder ähnlicher Form noch keiner Prüfungsbehörde/Prüfungsstelle vorgelegen hat. Ich erkläre mich damit \textcolor{red}{einverstanden/nicht einverstanden}, dass die Arbeit der Öffentlichkeit zugänglich gemacht wird. Ich erkläre mich damit einverstanden, dass die Digitalversion dieser Arbeit zwecks Plagiatsprüfung auf die Server externer Anbieter hochgeladen werden darf. Die Plagiatsprüfung stellt keine Zurverfügungstellung für die Öffentlichkeit dar.
 
 			\par\medskip
