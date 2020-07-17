@@ -1,6 +1,6 @@
 # FOM-Latex-Vorlage mit APA6: 
 
-* Geforkt am 27.04.2020 von **[GitHub](https://github.com/andygrunwald/FOM-LaTeX-Template)** nach **[GitLab](https://gitlab.com/haenno/fom-latex-apa6)**- Download als Zip in 'backup'.
+* Geforkt am 27.04.2020 von **[GitHub](https://github.com/andygrunwald/FOM-LaTeX-Template)** - Download als Zip in 'backup'.
 * Credit to **Andreas Grunwald & contributers** >> [github.com/andygrunwald/FOM-LaTeX-Template](https://github.com/andygrunwald/FOM-LaTeX-Template).
 * Entstanden aus dem '[Issue #148: Literaturverzeichnis und Zitieren nach APA Richtlinien...](https://github.com/andygrunwald/FOM-LaTeX-Template/issues/148)'.
 
@@ -20,8 +20,14 @@ Repository hier auf öffentlich, vor allem für unseren aktuellen Kurs (Grüße!
 
 ## Changelog
 
+**18.07.2020**
+* Umzug zurück nach Github
+
+**05 bis 06/2020**
+* Erste Seminararbeit mit Vorlage geschrieben
+
 **bis 09.05.2020**
-* weiterer umbau/anpassung apa6 nach Muster/Anforderung LMU https://gitlab.com/haenno/fom-latex-apa6/-/blob/master/backup/hinweise-zur-apa.pdf
+* weiterer umbau/anpassung apa6 nach Muster/Anforderung LMU https://github.com/haenno/fom-latex-apa6/blob/master/backup/hinweise-zur-apa.pdf
 * verkürzen von zitationen bei 2. nennung unter bedinungen
 * genaue formatierung LiteraturVerz. übernommen
 * dank an DaMiu für tips!
