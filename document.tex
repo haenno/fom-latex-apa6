@@ -1,0 +1,1264 @@
+%-----------------------------------
+% Define document and include general packages
+%-----------------------------------
+% Tabellen- und Abbildungsverzeichnis stehen normalerweise nicht im
+% Inhaltsverzeichnis. Gleiches gilt für das Abkürzungsverzeichnis (siehe unten).
+% Manche Dozenten bemängeln das. Die Optionen 'listof=totoc,bibliography=totoc'
+% geben das Tabellen- und Abbildungsverzeichnis im Inhaltsverzeichnis (toc=Table
+% of Content) aus.
+% Da es aber verschiedene Regelungen je nach Dozent geben kann, werden hier
+% beide Varianten dargestellt.
+\documentclass[12pt,oneside,titlepage,listof=totoc,bibliography=totoc]{scrartcl}
+%\documentclass[12pt,oneside,titlepage]{scrartcl}
+
+%-----------------------------------
+% Dokumentensprache
+%-----------------------------------
+%\def\FOMEN{}% Auskommentieren um die Dokumentensprache auf englisch zu ändern
+\newif\ifde
+\newif\ifen
+
+%-----------------------------------
+% Meta informationen
+%-----------------------------------
+% haenno-apa6-slim: Start
+% \input{skripte/meta}
+
+%-----------------------------------
+% Meta Informationen zur Arbeit
+%-----------------------------------
+
+% Autor
+\newcommand{\myAutor}{Max Mustermann}
+
+% Adresse
+\newcommand{\myAdresse}{Heidestra\ss e 17 \\ \> \> \> 51147 Köln}
+
+% Titel der Arbeit
+\newcommand{\myTitel}{LATEX-Vorlage - mit Biblatex}
+
+% Betreuer
+\newcommand{\myBetreuer}{Prof. Dr. Peter Lustig}
+
+% Lehrveranstaltung
+\newcommand{\myLehrveranstaltung}{Modul Nr. 1}
+
+% Matrikelnummer
+\newcommand{\myMatrikelNr}{123456}
+
+% Ort
+\newcommand{\myOrt}{Düsseldorf}
+
+% Datum der Abgabe
+\newcommand{\myAbgabeDatum}{\today}
+
+% Semesterzahl
+\newcommand{\mySemesterZahl}{7}
+
+% Name der Hochschule
+\newcommand{\myHochschulName}{FOM Hochschule für Oekonomie \& Management}
+
+% Standort der Hochschule
+\newcommand{\myHochschulStandort}{Düsseldorf}
+
+% Studiengang
+\newcommand{\myStudiengang}{Wirtschaftsinformatik}
+
+% Art der Arbeit
+\newcommand{\myThesisArt}{Bachelor Thesis}
+
+% Zu erlangender akademische Grad
+\newcommand{\myAkademischerGrad}{Bachelor of Science (B.Sc.)}
+
+% Firma
+\newcommand{\myFirma}{Mustermann GmbH}
+
+
+\ifdefined\FOMEN
+%Englisch
+\entrue
+\usepackage[english]{babel}
+\else
+%Deutsch
+\detrue
+\usepackage[ngerman]{babel}
+\fi
+
+
+% haenno-apa6-slim: End
+
+\newcommand{\langde}[1]{%
+   \ifde\selectlanguage{ngerman}#1\fi}
+\newcommand{\langen}[1]{%
+   \ifen\selectlanguage{english}#1\fi}
+\usepackage[utf8]{luainputenc}
+\langde{\usepackage[babel,german=quotes]{csquotes}}
+\langen{\usepackage[babel,english=british]{csquotes}}
+\usepackage[T1]{fontenc}
+\usepackage{fancyhdr}
+\usepackage{fancybox}
+\usepackage[a4paper, left=4cm, right=2cm, top=4cm, bottom=2cm]{geometry}
+\usepackage{graphicx}
+\usepackage{colortbl}
+\usepackage[capposition=top]{floatrow}
+\usepackage{array}
+\usepackage{float}      %Positionierung von Abb. und Tabellen mit [H] erzwingen
+\usepackage{footnote}
+% Darstellung der Beschriftung von Tabellen und Abbildungen (Leitfaden S. 44)
+% singlelinecheck=false: macht die Caption linksbündig (statt zentriert)
+% labelfont auf fett: (Tabelle x.y:, Abbildung: x.y)
+% font auf fett: eigentliche Bezeichnung der Abbildung oder Tabelle
+% Fettschrift laut Leitfaden 2018 S. 45
+\usepackage[singlelinecheck=false, labelfont=bf, font=bf]{caption}
+\usepackage{caption}
+\usepackage{enumitem}
+\usepackage{amssymb}
+\usepackage{mathptmx}
+%\usepackage{minted} %Kann für schöneres Syntax Highlighting genutzt werden. ACHTUNG: Python muss installiert sein.
+\usepackage[scaled=0.9]{helvet} % Behebt, zusammen mit Package courier, pixelige Überschriften. Ist, zusammen mit mathptx, dem times-Package vorzuziehen. Details: https://latex-kurs.de/fragen/schriftarten/Times_New_Roman.html
+\usepackage{courier}
+\usepackage{amsmath}
+\usepackage[table]{xcolor}
+\usepackage{marvosym}			% Verwendung von Symbolen, z.B. perfektes Eurozeichen
+
+\renewcommand\familydefault{\sfdefault}
+\usepackage{ragged2e}
+
+% Mehrere Fussnoten nacheinander mit Komma separiert
+\usepackage[hang,multiple]{footmisc}
+\setlength{\footnotemargin}{1em}
+
+% todo Aufgaben als Kommentare verfassen für verschiedene Editoren
+\usepackage{todonotes}
+
+% Verhindert, dass nur eine Zeile auf der nächsten Seite steht
+\setlength{\marginparwidth}{2cm}
+\usepackage[all]{nowidow}
+
+%-----------------------------------
+% Farbdefinitionen
+%-----------------------------------
+\definecolor{darkblack}{rgb}{0,0,0}
+\definecolor{dunkelgrau}{rgb}{0.8,0.8,0.8}
+\definecolor{hellgrau}{rgb}{0.0,0.7,0.99}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+
+%-----------------------------------
+% Pakete für Tabellen
+%-----------------------------------
+\usepackage{epstopdf}
+\usepackage{nicefrac} % Brüche
+\usepackage{multirow}
+\usepackage{rotating} % vertikal schreiben
+\usepackage{mdwlist}
+\usepackage{tabularx}% für Breitenangabe
+
+%-----------------------------------
+% sauber formatierter Quelltext
+%-----------------------------------
+\usepackage{listings}
+% JavaScript als Sprache definieren:
+\lstdefinelanguage{JavaScript}{
+	keywords={break, super, case, extends, switch, catch, finally, for, const, function, try, continue, if, typeof, debugger, var, default, in, void, delete, instanceof, while, do, new, with, else, return, yield, enum, let, await},
+	keywordstyle=\color{blue}\bfseries,
+	ndkeywords={class, export, boolean, throw, implements, import, this, interface, package, private, protected, public, static},
+	ndkeywordstyle=\color{darkgray}\bfseries,
+	identifierstyle=\color{black},
+	sensitive=false,
+	comment=[l]{//},
+	morecomment=[s]{/*}{*/},
+	commentstyle=\color{purple}\ttfamily,
+	stringstyle=\color{red}\ttfamily,
+	morestring=[b]',
+	morestring=[b]"
+}
+
+\lstset{
+	%language=JavaScript,
+	numbers=left,
+	numberstyle=\tiny,
+	numbersep=5pt,
+	breaklines=true,
+	showstringspaces=false,
+	frame=l ,
+	xleftmargin=5pt,
+	xrightmargin=5pt,
+	basicstyle=\ttfamily\scriptsize,
+	stepnumber=1,
+	keywordstyle=\color{blue},          % keyword style
+  	commentstyle=\color{dkgreen},       % comment style
+  	stringstyle=\color{mauve}         % string literal style
+}
+
+%-----------------------------------
+%Literaturverzeichnis Einstellungen
+%-----------------------------------
+
+% Biblatex
+
+\usepackage{url}
+\urlstyle{same}
+
+% haenno-apa6-slim: Start
+
+%%%% Neuer Leitfaden (2018)
+%\usepackage[
+%backend=biber,
+%style=ext-authoryear-ibid, % Auskommentieren und nächste Zeile einkommentieren, falls "Ebd." (ebenda) nicht für sich-wiederholende Fussnoten genutzt werden soll.
+%style=ext-authoryear,
+%maxcitenames=3,	% mindestens 3 Namen ausgeben bevor et. al. kommt
+%maxbibnames=999,
+%mergedate=false,
+%date=iso,
+%seconds=true, %werden nicht verwendet, so werden aber Warnungen unterdrückt.
+%urldate=iso,
+%innamebeforetitle,
+%dashed=false,
+%autocite=footnote,
+%doi=false,
+%useprefix=true, % 'von' im Namen beachten (beim Anzeigen)
+%mincrossrefs = 1
+%]{biblatex}%iso dateformat für YYYY-MM-DD
+
+%weitere Anpassungen für BibLaTex
+% \input{skripte/modsBiblatex2018}
+
+% haenno-apa6-slim: End
+
+% haenno-apa6-slim: Start
+
+%%%% APA START / Biblatex
+%% Zitierung und Literaturverzeichnis nach APA6 der LMU
+%% ---> Prof. wünscht APA6 nach LMU PDF Besipielen https://gitlab.com/haenno/fom-latex-apa6/-/blob/master/backup/hinweise-zur-apa.pdf
+% Teillösungen von hier... 
+% https://tex.stackexchange.com/questions/452228/modifying-bibliography-with-biblatex-biber-apa-style-locationpublisherdoi 
+% https://texwelt.de/fragen/2686/wie-formatiere-ich-ein-bibtex-literaturverzeichnis-fur-eine-deutschsprachige-ausgabe-nach-den-regeln-der-apa
+% https://tex.stackexchange.com/questions/452032/setting-maxcitenames-for-biblatex-apa (credit dahin für Lösung um die anzahl und wiederholungsnennungen, auch an den entdecker DaMiu)
+% https://tex.stackexchange.com/questions/526434/edit-biblatex-apa-style  Lösung Punkt hinter OnlineQuellen entf.  nach Tip, DaMiu 
+
+%% Literaturverzeichnis entsprechend abrufen mit:
+% -  Internetquellen: (@online) 	Name Herausgeber Seite (analog Autor), 	Erscheinungsjahr, URL, Abrufdatum-URL
+% -  Buch:(@book)				 Autoren,			 Erscheinungsjahr, Titel, ggfls. Hinweis auf Auflage/Band, Verlagsort, Verlagsname
+% -  Zeitschriftenartikel(@article)   Autoren,			 Erscheinungsjahr, Titel des Artikel, Titel der Zeitschrift, Ausgabe mit Band- ggfls. Heftnummer, Seitenzahl(en)
+% -  Weiter auch  möglich:, Herausgeberwerk (@incollection) und  Buchkapitel- oder beitrag(@inbook)
+% (ungetestet bisher : Dissertationen (@phdthesis))
+
+
+\usepackage[
+    style           = apa6, 
+    uniquelist      = false,    
+    maxcitenames    = 6,
+    backend         = biber,
+	urldate         = short,
+	uniquename 		= true,
+	language		= ngerman
+	]{biblatex} 
+		
+	%% START Block für Funktion (1. Nennung von 2-6 Autoren: Alle Namen, danach nur noch 1. Name + et.al) 
+	\usepackage{lmodern} 
+	\makeatletter
+	\newcommand{\apamaxcitenames}{6}
+	\DeclareNameFormat{labelname}{%
+	  \ifthenelse{\value{uniquelist}>1}
+		{\numdef\cbx@min{\value{uniquelist}}}
+		{\numdef\cbx@min{\value{minnames}}}%
+	  \ifboolexpr{test {\ifnumcomp{\value{listcount}}{=}{1}}
+				  or test {\ifnumcomp{\value{listtotal}}{=}{2}}}
+		{\usebibmacro{labelname:doname}%
+		  {\namepartfamily}%
+		  {\namepartfamilyi}%
+		  {\namepartgiven}%
+		  {\namepartgiveni}%
+		  {\namepartprefix}%
+		  {\namepartprefixi}%
+		  {\namepartsuffix}%
+		  {\namepartsuffixi}}
+		{\ifboolexpr{test {\ifnumcomp{\value{listtotal}}{>}{\apamaxcitenames}}
+					 or test {\ifciteseen}}
+		 {\ifnumcomp{\value{listcount}}{<}{\cbx@min + 1}
+		   {\usebibmacro{labelname:doname}%
+			 {\namepartfamily}%
+			 {\namepartfamilyi}%
+			 {\namepartgiven}%
+			 {\namepartgiveni}%
+			 {\namepartprefix}%
+			 {\namepartprefixi}%
+			 {\namepartsuffix}%
+			 {\namepartsuffixi}}
+		   {}%
+		  \ifnumcomp{\value{listcount}}{=}{\cbx@min + 1}
+			{\ifnumcomp{\value{listcount}}{<}{\value{listtotal}}
+			  {\printdelim{andothersdelim}\bibstring{andothers}}
+			  {\usebibmacro{labelname:doname}%
+				{\namepartfamily}%
+				{\namepartfamilyi}%
+				{\namepartgiven}%
+				{\namepartgiveni}%
+				{\namepartprefix}%
+				{\namepartprefixi}%
+				{\namepartsuffix}%
+				{\namepartsuffixi}}}
+			{}%
+		  \ifnumcomp{\value{listcount}}{>}{\cbx@min + 1}
+		   {\relax}%
+		   {}}%
+		 {\usebibmacro{labelname:doname}%
+		   {\namepartfamily}%
+		   {\namepartfamilyi}%
+		   {\namepartgiven}%
+		   {\namepartgiveni}%
+		   {\namepartprefix}%
+		   {\namepartprefixi}%
+		   {\namepartsuffix}%
+		   {\namepartsuffixi}}}}
+	\makeatother 
+	\DeclareLanguageMapping{ngerman}{ngerman-apa}
+	%% ENDE Block für Funktion (1. Nennung von 2-6 Autoren: Alle Namen, danach nur noch 1. Name + et.al)
+	
+	\DeclareDelimFormat*{finalnamedelim}{\addspace\bibstring{and}\space} % In Parencite von "&" auf "und" ändern
+	%\hypersetup{hidelinks}  %Grüne Links auf Literaturverz. unterdrücken.
+	\setlength\bibitemsep{1.3ex} % Abstände im Literaturverzeichnis erhöhen
+	\setlength\bibnamesep{1.0ex}
+	\AtBeginBibliography{\singlespacing} % Zeilenabstand im Literaturverzeichnis ist Einzeilig - siehe Leitfaden S. 14
+	\urlstyle{same} %Standard-Font für Link anstelle der "Schreibmaschinenschrift"
+	\DeclareFieldFormat[online]{urldate}{[#1\printfield{urldate}].} 	% Anpassung @online + @misc Bibl: Datum in eckigen Klammern ans Ende
+	\DeclareFieldFormat[online]{title}{\mkbibemph{#1}} %Anpassung @online + @misc Titel Kursiv	
+	\DeclareFieldFormat[online]{url}{\langde{Verfügbar unter}\langen{Available under}\space \url{#1}} 	%Anpassung @online + @misc Text vor URL
+	\renewbibmacro*{url+urldate}{\usebibmacro{url}\setunit{\addspace}\usebibmacro{urldate}}  % URL vor Abrufdatum setzen + getrennte Wörter "Verfügbar" und "Unter" entfernen
+
+%%%% APA ENDE
+
+% haenno-apa6-slim: End
+
+
+%%%%% Alter Leitfaden. Ggf. Einkommentieren und Bereich hierüber auskommentieren
+%\usepackage[
+%backend=biber,
+%style=numeric,
+%citestyle=authoryear,
+%url=false,
+%isbn=false,
+%notetype=footonly,
+%hyperref=false,
+%sortlocale=de]{biblatex}
+
+%weitere Anpassungen für BibLaTex
+% \input{skripte/modsBiblatex}
+
+%%%% Ende Alter Leitfaden
+
+%Bib-Datei einbinden
+\addbibresource{literatur.bib}
+
+% Zeilenabstand im Literaturverzeichnis ist Einzeilig
+% siehe Leitfaden S. 14
+\AtBeginBibliography{\singlespacing}
+
+%-----------------------------------
+% Silbentrennung
+%-----------------------------------
+\usepackage{hyphsubst}
+\HyphSubstIfExists{ngerman-x-latest}{%
+\HyphSubstLet{ngerman}{ngerman-x-latest}}{}
+
+%-----------------------------------
+% Pfad fuer Abbildungen
+%-----------------------------------
+\graphicspath{{./}{./media/}}
+
+%-----------------------------------
+% Weitere Ebene einfügen
+%-----------------------------------
+% haenno-apa6-slim: Start
+% \input{skripte/weitereEbene}
+
+\usepackage{titletoc}
+
+\makeatletter
+
+% Setze die Tiefe des Inhaltsverzeichnis auf 4 Ebenen
+% Damit erscheinen \paragraph-Sektionen auch im Inhaltsverzeichnis
+\setcounter{secnumdepth}{4}
+\setcounter{tocdepth}{4}
+
+% Fuege Abstand nach unten wie in einer normalen \section hinzu
+% Andernfalls haette \paragraph keinen Zeilenumbruch
+% Der Zeilenumbruch koennte mit einer leeren \mbox{} ersetzt werden
+% Jedoch klebt dann der Text relativ nah an der Ueberschrift
+\renewcommand{\paragraph}{%
+  \@startsection{paragraph}{4}%
+  {\z@}{3.25ex \@plus 1ex \@minus .2ex}{1.5ex plus 0.2ex}%
+  {\normalfont\normalsize\bfseries\sffamily}%
+}
+
+\makeatother
+
+
+% haenno-apa6-slim: End
+
+%-----------------------------------
+% Paket für die Nutzung von Anhängen
+%-----------------------------------
+\usepackage{appendix}
+
+%-----------------------------------
+% Zeilenabstand 1,5-zeilig
+%-----------------------------------
+\usepackage{setspace}
+\onehalfspacing
+
+%-----------------------------------
+% Absätze durch eine neue Zeile
+%-----------------------------------
+\setlength{\parindent}{0mm}
+\setlength{\parskip}{0.8em plus 0.5em minus 0.3em}
+
+\sloppy					%Abstände variieren
+\pagestyle{headings}
+
+%----------------------------------
+% Präfix in das Abbildungs- und Tabellenverzeichnis aufnehmen, statt nur der Nummerierung (siehe Issue #206).
+%----------------------------------
+\KOMAoption{listof}{entryprefix} % Siehe KOMA-Script Doku v3.28 S.153
+\BeforeStartingTOC[lof]{\renewcommand*\autodot{:}} % Für den Doppelpunkt hinter Präfix im Abbildungsverzeichnis
+\BeforeStartingTOC[lot]{\renewcommand*\autodot{:}} % Für den Doppelpunkt hinter Präfix im Tabellenverzeichnis
+
+%-----------------------------------
+% Abkürzungsverzeichnis
+%-----------------------------------
+\usepackage[printonlyused]{acronym}
+
+%-----------------------------------
+% Symbolverzeichnis
+%-----------------------------------
+% Quelle: https://www.namsu.de/Extra/pakete/Listofsymbols.pdf
+\usepackage[final]{listofsymbols}
+
+%-----------------------------------
+% Glossar
+%-----------------------------------
+\usepackage{glossaries}
+\glstoctrue %Auskommentieren, damit das Glossar nicht im Inhaltsverzeichnis angezeigt wird.
+\makenoidxglossaries
+% haenno-apa6-slim: Start
+% \input{abkuerzungen/glossar}
+
+\newglossaryentry{glossar}{name={Glossar},description={In einem Glossar werden Fachbegriffe und Fremdwörter mit ihren Erklärungen gesammelt.}}
+\newglossaryentry{glossaries}{name={Glossaries},description={Glossaries ist ein Paket was einen im Rahmen von LaTeX bei der Erstellung eines Glossar unterstützt.}}
+
+% haenno-apa6-slim: End
+
+%-----------------------------------
+% PDF Meta Daten setzen
+%-----------------------------------
+\usepackage[hyperfootnotes=false]{hyperref} %hyperfootnotes=false deaktiviert die Verlinkung der Fußnote. Ansonsten inkompaibel zum Paket "footmisc"
+% Behebt die falsche Darstellung der Lesezeichen in PDF-Dateien, welche eine Übersetzung besitzen
+% siehe Issue 149
+\makeatletter
+\pdfstringdefDisableCommands{\let\selectlanguage\@gobble}
+\makeatother
+
+\hypersetup{
+    pdfinfo={
+        Title={\myTitel},
+        Subject={\myStudiengang},
+        Author={\myAutor},
+        Build=1.1
+    }
+}
+
+%-----------------------------------
+% PlantUML
+%-----------------------------------
+%\usepackage{plantuml}
+
+%-----------------------------------
+% Umlaute in Code korrekt darstellen
+% siehe auch: https://en.wikibooks.org/wiki/LaTeX/Source_Code_Listings
+%-----------------------------------
+\lstset{literate=
+	{á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1
+	{Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1
+	{à}{{\`a}}1 {è}{{\`e}}1 {ì}{{\`i}}1 {ò}{{\`o}}1 {ù}{{\`u}}1
+	{À}{{\`A}}1 {È}{{\'E}}1 {Ì}{{\`I}}1 {Ò}{{\`O}}1 {Ù}{{\`U}}1
+	{ä}{{\"a}}1 {ë}{{\"e}}1 {ï}{{\"i}}1 {ö}{{\"o}}1 {ü}{{\"u}}1
+	{Ä}{{\"A}}1 {Ë}{{\"E}}1 {Ï}{{\"I}}1 {Ö}{{\"O}}1 {Ü}{{\"U}}1
+	{â}{{\^a}}1 {ê}{{\^e}}1 {î}{{\^i}}1 {ô}{{\^o}}1 {û}{{\^u}}1
+	{Â}{{\^A}}1 {Ê}{{\^E}}1 {Î}{{\^I}}1 {Ô}{{\^O}}1 {Û}{{\^U}}1
+	{œ}{{\oe}}1 {Œ}{{\OE}}1 {æ}{{\ae}}1 {Æ}{{\AE}}1 {ß}{{\ss}}1
+	{ű}{{\H{u}}}1 {Ű}{{\H{U}}}1 {ő}{{\H{o}}}1 {Ő}{{\H{O}}}1
+	{ç}{{\c c}}1 {Ç}{{\c C}}1 {ø}{{\o}}1 {å}{{\r a}}1 {Å}{{\r A}}1
+	{€}{{\EUR}}1 {£}{{\pounds}}1 {„}{{\glqq{}}}1
+}
+
+%-----------------------------------
+% Kopfbereich / Header definieren
+%-----------------------------------
+\pagestyle{fancy}
+\fancyhf{}
+% Seitenzahl oben, mittig, mit Strichen beidseits
+% \fancyhead[C]{-\ \thepage\ -}
+
+% Seitenzahl oben, mittig, entsprechend Leitfaden ohne Striche beidseits
+\fancyhead[C]{\thepage}
+%\fancyhead[L]{\leftmark}							% kein Footer vorhanden
+% Waagerechte Linie unterhalb des Kopfbereiches anzeigen. Laut Leitfaden ist
+% diese Linie nicht erforderlich. Ihre Breite kann daher auf 0pt gesetzt werden.
+\renewcommand{\headrulewidth}{0.4pt}
+%\renewcommand{\headrulewidth}{0pt}
+
+%-----------------------------------
+% Damit die hochgestellten Zahlen auch auf die Fußnote verlinkt sind (siehe Issue 169)
+%-----------------------------------
+\hypersetup{colorlinks=true, breaklinks=true, linkcolor=darkblack, citecolor=darkblack, menucolor=darkblack, urlcolor=darkblack, linktoc=all, bookmarksnumbered=false, pdfpagemode=UseOutlines, pdftoolbar=true}
+\urlstyle{same}%gleiche Schriftart für den Link wie für den Text
+
+%-----------------------------------
+% Start the document here:
+%-----------------------------------
+\begin{document}
+
+\pagenumbering{Roman}								% Seitennumerierung auf römisch umstellen
+\newcolumntype{C}{>{\centering\arraybackslash}X}	% Neuer Tabellen-Spalten-Typ:
+%Zentriert und umbrechbar
+
+%-----------------------------------
+% Textcommands
+%-----------------------------------
+% haenno-apa6-slim: Start
+% \input{skripte/textcommands}
+%----------------------------------
+%  TextCommands
+%----------------------------------
+%
+%
+%
+%
+%----------------------------------
+%  common textCommands
+%----------------------------------
+% Information: OL bedeutet ohne Leerzeichen. Damit man dieses Command z. B. vor einem Komma oder vor einem anderen Zeichen verwenden kann. Dies ist ein Best-Practis von mir und hat sich sehr bewehrt.
+% Allgemein hat es sich bewert alle Wörter die man häufig schreibt und wahrscheinlich falsch oder unterscheidlich schreibt, als Textcommand zu hinterlegen.
+% 
+%
+%
+\renewcommand{\symheadingname}{\langde{Symbolverzeichnis}\langen{List of Symbols}}
+\newcommand{\abbreHeadingName}{\langde{Abkürzungsverzeichnis}\langen{List of Abbreviations}}
+\newcommand{\headingNameInternetSources}{\langde{Internetquellen}\langen{Internet sources}}
+\newcommand{\AppendixName}{\langde{Anhang}\langen{Appendix}}
+\newcommand{\vglf}{\langde{Vgl.}\langen{compare}}
+\newcommand{\pagef}{\langde{S. }\langen{p. }}
+\newcommand{\os}{\mbox{o. S}}
+\newcommand{\ojol}{\mbox{o. J.}}
+\newcommand{\oj}{\ojol\ }
+\newcommand{\og}{\mbox{o. g.}\ }
+\newcommand{\ua}{\mbox{u. a.}\ }
+\newcommand{\dah}{\mbox{d. h.}\ }
+\newcommand{\zbol}{\mbox{z. B.}}
+\newcommand{\zb}{\zbol\ }
+\newcommand{\uamol}{unter anderem}
+\newcommand{\uam}{\uamol\ }
+\newcommand{\uanol}{unter anderen}%mit Leerzeichen
+\newcommand{\uan}{\uanol\ }%mit Leerzeichen
+\newcommand{\abbol}{Ab"-bil"-dung}
+\newcommand{\abb}{\abbol\ }
+\newcommand{\tabol}{Tabelle}
+\newcommand{\tab}{\tabol\ }
+\newcommand{\ggfol}{ggf.}
+\newcommand{\ggf}{\ggfol\ }
+\newcommand{\unodol}{und/oder}
+\newcommand{\unod}{\unodol\ }
+
+%----------------------------------
+% project individual textCommands
+%----------------------------------
+\newcommand{\lehol}{Lebensmitteleinzelhandel}%Beispiel eines langen Wortes
+\newcommand{\leh}{\lehol\ }
+
+% haenno-apa6-slim: End
+
+%-----------------------------------
+% Titlepage
+%-----------------------------------
+% haenno-apa6-slim: Start
+% \input{kapitel/titelseite}
+\begin{titlepage}
+	\newgeometry{left=2cm, right=2cm, top=2cm, bottom=2cm}
+	\begin{center}
+    \includegraphics[width=2.3cm]{media/fomLogo} \\
+    \vspace{.5cm}
+		\begin{Large}\textbf{\myHochschulName}\end{Large}\\
+    \vspace{.5cm}
+		\begin{Large}\langde{Hochschulzentrum}\langen{university location} \myHochschulStandort\end{Large}\\
+		\vspace{2cm}
+    \begin{Large}\textbf{\myThesisArt}\end{Large}\\
+    \vspace{.5cm}
+		% \langde{Berufsbegleitender Studiengang}
+		% \langen{part-time degree program}\\
+		% \mySemesterZahl. Semester\\
+    \langde{im Studiengang}\langen{in the study course} \myStudiengang
+		\vspace{1.7cm}
+
+		\langde{zur Erlangung des Grades eines}\langen{to obtain the degree of}\\
+    \vspace{0.5cm}
+		\begin{Large}{\myAkademischerGrad}\end{Large}\\
+		% Oder für Hausarbeiten:
+		%\textbf{im Rahmen der Lehrveranstaltung}\\
+		%\textbf{\myLehrveranstaltung}\\
+		\vspace{1.8cm}
+		\langde{über das Thema}
+		\langen{on the subject}\\
+    \vspace{0.5cm}
+		\large{\textbf{\myTitel}}\\
+		\vspace{2cm}
+    \langde{von}\langen{by}\\
+    \vspace{0.5cm}
+    \begin{Large}{\myAutor}\end{Large}\\
+	\end{center}
+	\normalsize
+	\vfill
+    \begin{tabular}{ l l }
+        \langde{Betreuer} % für Hausarbeiten
+        %\langde{Erstgutachter} % für Bachelor- / Master-Thesis
+        \langen{Advisor}: & \myBetreuer\\
+        \langde{Matrikelnummer}
+        \langen{Matriculation Number}: & \myMatrikelNr\\
+        \langde{Abgabedatum}
+        \langen{Submission}: & \myAbgabeDatum
+    \\
+    \end{tabular}
+\end{titlepage}
+
+% haenno-apa6-slim: End
+
+%-----------------------------------
+% Inhaltsverzeichnis
+%-----------------------------------
+% Um das Tabellen- und Abbbildungsverzeichnis zu de/aktivieren ganz oben in Documentclass schauen
+\setcounter{page}{2}
+\addtocontents{toc}{\protect\enlargethispage{-20mm}}% Die Zeile sorgt dafür, dass das Inhaltsverzeichnisseite auf die zweite Seite gestreckt wird und somit schick aussieht. Das sollte eigentlich automatisch funktionieren. Wer rausfindet wie, kann das gern ändern.
+\setcounter{tocdepth}{4}
+\tableofcontents
+\newpage
+
+%-----------------------------------
+% Abbildungsverzeichnis
+%-----------------------------------
+\listoffigures
+\newpage
+%-----------------------------------
+% Tabellenverzeichnis
+%-----------------------------------
+\listoftables
+\newpage
+%-----------------------------------
+% Abkürzungsverzeichnis
+%-----------------------------------
+% Falls das Abkürzungsverzeichnis nicht im Inhaltsverzeichnis angezeigt werden soll
+% dann folgende Zeile auskommentieren.
+\addcontentsline{toc}{section}{\abbreHeadingName}
+% haenno-apa6-slim: Start
+% \input{abkuerzungen/acronyms}
+
+\section*{\langde{Abkürzungsverzeichnis}\langen{List of Abbreviations}}
+
+\begin{acronym}[WYSIWYG]\itemsep0pt %der Parameter in Klammern sollte die längste Abkürzung sein. Damit wird der Abstand zwischen Abkürzung und Übersetzung festgelegt
+  \acro{OC}{FOM Online Campus}
+  \acro{WYSIWYG}{What you see is what you get}
+  \acro{Beispiel}{Nicht verwendet, taucht nicht im Abkürzungsverzeichnis auf}
+\end{acronym}
+% haenno-apa6-slim: End
+\newpage
+
+%-----------------------------------
+% Symbolverzeichnis
+%-----------------------------------
+% In Overleaf führt der Einsatz des Symbolverzeichnisses zu einem Fehler, der aber ignoriert werdne kann
+% Falls das Symbolverzeichnis nicht im Inhaltsverzeichnis angezeigt werden soll
+% dann folgende Zeile auskommentieren.
+\addcontentsline{toc}{section}{\symheadingname}
+% haenno-apa6-slim: Start
+% \input{skripte/symbolDef}
+%
+%
+%
+%
+%
+%
+%
+% Quelle: https://www.namsu.de/Extra/pakete/Listofsymbols.pdf
+% Wie ind er Quelle beschrieben führt das Verwenden von Umlauten oder ß zu einem Fehler.
+% Hier werden die Symbole definiert in folgender Form:
+% \newsym[Beschreibung]{Symbolbefehl}{Symbol}
+\opensymdef
+\newsym[Aufrechter Buchstabe]{AB}{\text{A}}
+\newsym[Menge aller natuerlichen Zahlen ohne die Null]{symnz}{\mathbb{N}}
+\newsym[Menge aller natuerlichen Zahlen einschliesslich Null]{symnzmn}{\mathbb{N}_{0}}
+\newsym[Menge aller ganzen Zahlen]{GZ}{\mathbb{Z}}
+\newsym[Menge aller rationalen Zahlen]{RatZ}{\mathbb{Q}}
+\newsym[Menge aller reellen Zahlen]{RZ}{\mathbb{R}}
+\closesymdef
+
+% haenno-apa6-slim: End
+\listofsymbols
+\newpage
+
+%-----------------------------------
+% Glossar
+%-----------------------------------
+\printnoidxglossaries
+\newpage
+
+%-----------------------------------
+% Sperrvermerk
+%-----------------------------------
+% haenno-apa6-slim: Start
+% \input{kapitel/anhang/sperrvermerk}
+
+\newpage
+\thispagestyle{empty}
+
+%-----------------------------------
+% Sperrvermerk
+%-----------------------------------
+\section*{Sperrvermerk}
+Die vorliegende Abschlussarbeit mit dem Titel \enquote{\myTitel} enthält unternehmensinterne Daten der Firma \myFirma . Daher ist sie nur zur Vorlage bei der FOM sowie den Begutachtern der Arbeit bestimmt. Für die Öffentlichkeit und dritte Personen darf sie nicht zugänglich sein.
+
+\vspace{5cm}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular*}{\textwidth}{c @{\extracolsep{\fill}} ccccc}
+		\myOrt, \today
+		&
+		% Hinterlege deine eingescannte Unterschrift im Verzeichnis /abbildungen und nenne sie unterschrift.png
+		% Bilder mit transparentem Hintergrund können teils zu Problemen führen
+		\includegraphics[width=0.35\textwidth]{unterschrift}\vspace*{-0.35cm}
+		\\
+		\rule[0.5ex]{12em}{0.55pt} & \rule[0.5ex]{12em}{0.55pt} \\
+		(Ort, Datum) & (Eigenhändige Unterschrift)
+		\\
+	\end{tabular*} \\
+\end{table}
+
+\newpage
+
+% haenno-apa6-slim: End
+%-----------------------------------
+% Seitennummerierung auf arabisch und ab 1 beginnend umstellen
+%-----------------------------------
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+%-----------------------------------
+% Kapitel / Inhalte
+%-----------------------------------
+% Die Kapitel werden über folgende Datei eingebunden
+% haenno-apa6-slim: Start
+% \input{skripte/kapitelUebersicht.tex}
+
+% Hinzugefügt aufgrund von Issue 167
+%-----------------------------------
+% Kapitel / Inhalte
+%-----------------------------------
+% \input{kapitel/einleitung/einleitung}
+\section{Einleitung}
+Dies soll eine \LaTeX{}-Vorlage für den persönlichen Gebrauch werden. Sie hat weder einen Anspruch auf Richtigkeit, noch auf Vollständigkeit. Die Quellen liegen auf Github zur allgemeinen Verwendung. Verbesserungen sind jederzeit willkommen.
+
+\subsection{Zielsetzung}
+Kleiner Reminder für mich in Bezug auf die Dinge, die wir bei der Thesis beachten sollten und \LaTeX{}-Vorlage für die Thesis.
+
+\subsection{Aufbau der Arbeit}
+Kapitel \ref{infos} enthält die Inhalte des Thesis-Days und alles, was zum inhaltlichen erstellen der Thesis relevant sein könnte. In Kapitel \ref{latexDetails} \nameref{latexDetails} findet ihr wichtige Anmerkungen zu \LaTeX{}, wobei die wirklich wichtigen Dinge im Quelltext dieses Dokumentes stehen (siehe auch die Verzeichnisstruktur in Abbildung \ref{fig:verzeichnisStruktur}).
+
+
+\begin{figure}[H]
+\caption{Verzeichnisstruktur der \LaTeX{}-Datein}\label{fig:verzeichnisStruktur}
+\includegraphics[width=0.9\textwidth]{verzeichnisStruktur}
+\\
+Quelle: Eigene Darstellung
+\end{figure}
+
+% \input{kapitel/kapitel_1/kapitel_1}
+\newpage
+\section{Informationen vom Thesis-Day} \label{infos}
+Siehe auch Wissenschaftliches Arbeiten~\footcite[\vglf][S. 1]{Balzert.2008}. %ohne textcommands
+Damit sollten alle wichtigen Informationen abgedeckt sein ;-)~\footcite[\vglf][\pagef 1]{Balzert.2008} %mit textcommands
+Hier gibt es noch ein Beispiel für ein direktes Zitat\footcite[][\pagef 1]{Balzert.2008} %mit textcommands
+
+\subsection{Pre-Anmeldephase}
+\subsubsection{Vorüberlegungen}
+Trichtermethode: Man beginnt mit der eigentlichen  Konklusion und überlegt dann, welche allgemeinen Teile dafür benötigt werden.
+
+Welchen Mehrwert soll die Arbeit bieten \footnote{Diese Fu\ss note hat inhaltlich keinen Sinn. Es soll nur ein langer Text generiert werden, dass dieser Vermerk über zwei Zeilen reicht und bündig dargestellt wird.}? Auch darüber nachdenken, wie die Arbeit einen selbst weiter bringen kann. Studienverlauf prüfen. Welche Vorlesungen hat mich besonders interessiert? Wo liegen meine Stärken etc.
+
+\begin{enumerate}
+\item Themenfindung
+\item Literaturrecherche
+\item Gliederung/Motivationspapier erstellen
+\item Betreuerauswahl (siehe Liste im \ac{OC})
+\item Anmeldung (ab 141 Credits möglich)
+\end{enumerate}
+
+\subsubsection{Anregungen finden}
+\begin{itemize}
+\item \href{http://www.diplom.de}{www.diplom.de}
+\item \href{http://www.hausarbeiten.de}{www.hausarbeiten.de}
+\item Datenbanken aus Tools and Methods
+\item etc.
+\end{itemize}
+
+\newpage
+\subsection{Anfertigungsphase}
+Die Anmeldung ist mittlerweile jeden Mittwoch möglich.
+\begin{figure}[H]
+\caption{FOM-Vorgaben zur Thesis im Online-Campus}
+\includegraphics[width=0.9\textwidth]{campusDownload}
+\\
+\cite[Quelle: Vgl.][]{FOM}
+\end{figure}
+
+Laut Herrn Keller sollte der Umfang der Thesis (für eine gute Note) eher im Bereich der 60 Seiten liegen. Wie immer ist das vermutlich mit dem Betreuer abzustimmen. Die Liste der Dozenten, die Abschlussarbeiten betreuen, findet sich auch im \ac{OC}.
+
+Zeit zur Erstellung der Thesis 2-4 Monate.
+
+Es müssen zwei gedruckte Arbeiten abgegeben werden. Flüchtige Quellen als PDF ausgeben lassen und auf CD abgeben. Thesis zusätzlich digital einreichen. Beim Binden der Thesis auf Qualität achten. Haptik und erster Eindruck sind in der Bewertung \enquote{auch} wichtig. Arbeiten können in jedem FOM Studienzentrum abgegeben werden.
+
+\subsection{Post-Abgabephase}
+Nach Abgabe ca. 2 Wochen bis zum Kolloquium.
+
+Kolloquium:
+\begin{itemize}
+\item Dauer: 30 Minuten
+\item Präsentation (manche Prüfer wollen eine, andere nicht)
+\item Betreuer vorher fragen was er möchte
+\item Es gibt einen Frageteil, dieser bezieht sich auf die Arbeit, kann aber auch darüber hinaus gehen.
+\item Der Tag des Kolloquiums steht auf der Endbenotung
+\item Thesis und Kolloquium sind zwei getrennte Prüfungsbereiche. Für beide gibt es nur zwei Versuche.
+\item Am Tag des Kolloquiums erhält man die Bestätigung, ob bestanden oder nicht
+\end{itemize}
+
+% \input{kapitel/kapitel_2/kapitel_2}
+\newpage
+\section{Latex-Details} \label{latexDetails}
+
+\subsection{Verwendete Software, Editor und Zusatzpakete}
+\subsubsection{Windows 8+}
+\begin{itemize}
+\item MikTex: 2.9, 32-bit
+\item Biblatex: 3.5, Zusatz: Biber.exe
+\item Editor: TexStudio (kann ich empfehlen), Notepad++
+\end{itemize}
+
+\subsubsection{Mac OSX und iOS}
+\begin{itemize}
+\item MacTeX: \url{https://tug.org/mactex}
+\item Editor: TexPad \url{https://www.texpadapp.com}
+\end{itemize}
+
+\subsubsection{Online}
+Overleaf ist eine Online-Anwendung mit der Ihr direkt im Browser an eurer Thesis schreiben könnt. Bis 1GB Größe und maximal 60 Einzeldateien könnt ihr Overleaf kostenlos nutzen: \url{https://www.overleaf.com/}
+
+
+\subsection{Dokumentenklasse}
+Eigentlich hatte Prof. Finke empfohlen die Dokumentklassen \enquote{Book} oder \enquote{Report} für die Erstellung der Bachelor-Thesis zu verwenden, da diese über weitere Gliederungsebenen verfügen. Ich verwende dennoch eine leicht modifizierte Komaskript-Klasse \enquote{scrartcl}, mit der Erweiterung um eine Ebene. Siehe (skripte/weitereEbene.tex). Das Skript stammt irgendwo aus den Netz und übersteigt meine \LaTeX{}-Fähigkeiten. Dadurch kann ich über eine weitere Ebene in der Arbeit verfügen, ohne mich mit der Modifikation von Kapitel-Seiten rumschlagen~\footcite[Vgl. ][S. 5]{Tanenbaum.2003} zu müssen. Diese Quelle ist nur zur Demonstration und hat keinen inhaltlichen Bezug hierzu. Es werden übrigens nur die Quellen im Literaturverzeichnis angezeigt, die auch referenziert sind.
+
+
+\subsection{Grafiken}
+Das Paket \textbackslash usepackage\{float\} ermöglicht es die Grafiken und Tabellen an der Stelle im Text zu positionieren, wo diese im Quelltext stehen (Option H). Ansonsten würde \LaTeX{} diese dort unterbringen, wo es typographisch sinnvoll wäre - das wollen wir ja nicht ;-).
+
+Die Breite der Grafiken am Besten relativ zum Text angeben.
+
+\subsection{Quellcode}
+Quellcode kann auf unterschiedliche Arten eingebaut werden.
+Zum einen kann es hier durch direktives Einbinden in der Kapitel-Datei geschehen.
+\begin{lstlisting}
+% Hier wird aufgezeigt, wie man eine Grafik einbindet, es wird also in der PDF angezeigt,
+% da es in einem Quellcode-Listing steht.
+% Auch wenn es hier faelschlicherweise als LaTeX-Befehl angezeigt wird.
+\includegraphics[width=0.9\textwidth]{sup}
+\end{lstlisting}
+
+Bei längeren Quellcode-Listings empfiehlt es sich jedoch auf eine externe Datei im Ordner Quellcode zu verlinken und diese einzubauen:
+\lstinputlisting[language=HTML]{./media/Beispiel.html}
+
+Statt dem Package lstlisting, welches direkt auf Tex basiert, kann auch das Package minted verwendet werden.
+Dieses Package basiert auf python-pygments und unterstützt weit mehr Sprachkonstrukte als lstlisting.
+Um das Paket zu verwenden muss es eingebunden werden und zusätzlich python-pygments installiert sein.
+(Dies ist mit im Dockerfile vorhanden. Für die anderen Compile-Methoden, wie das native verwenden von Tex Live findet sich hier die Installationsanleitung für das minted Paket: https://ctan.org/pkg/minted?lang=de)
+
+Damit das kompilieren ohne Python trotzdem möglich ist, ist die Funktion standardmäßig ausgebaut. Deshalb muss zusätzlich in der Datei \begin{verbatim}document.tex \usepackage{minted} \end{verbatim} wieder einkommentiert werden. 
+
+Minted lässt sich dann ganz ähnlich zu lstlisting verwenden:
+\begin{lstlisting}
+	\begin{minted}{c}
+		int main() {
+			printf("hello, world");
+			return 0;
+		}
+	\end{minted}
+\end{lstlisting}	
+
+Da der Pfad zu den Abbildungen im Hauptdokument definiert wurde, muss hier nur noch der Name des Bildes ohne Dateiendung stehen (sup).
+
+\begin{figure}[H]
+\caption{Titel der Abbildung hier}
+\includegraphics[width=0.9\textwidth]{sup}
+\\
+Quelle: Eigene Darstellung
+\end{figure}
+
+\subsection{Tabellen}
+\begin{table}[H]
+\caption{Beispieltabelle 1}
+\label{tbl:beispieltabelle2}
+\begin{tabularx}{\textwidth}[ht]{|l|X|l|}
+  \hline
+  \textbf{Abkürzung} & \textbf{Beschreibung} & \textbf{Berechnung}\\
+  \hline\hline
+    MEK & Materialeinzelkosten & \\
+  	MGK & Materialgemeinkosten & $+ \uparrow$~*\\
+    FEK & Fertigungseinzelkosten & \\
+  	FGK & Fertigungsgemeinkosten & $+ \uparrow$~*\\
+	SEKF & Sondereinzelkosten der Fertigung & \\
+	\hline\hline
+	\multicolumn{3}{|l|}{\textbf{= Herstellungskosten}} \\
+	\hline\hline
+  	VwGK & Verwaltungsgemeinkosten & $+ \uparrow$~*\\
+  	VtGK & Vertriebsgemeinkosten & $+ \uparrow$~*\\
+  	SEKVt & Sondereinzelkosten des Vertriebes & \\
+	\hline\hline
+	\multicolumn{3}{|l|}{\textbf{= Selbstkosten}} \\
+	\hline\hline
+	\multicolumn{3}{|l|}{+ Gewinnaufschlag} \\
+	\multicolumn{3}{|l|}{+ Rabatte} \\
+	\hline\hline
+	\multicolumn{3}{|l|}{\textbf{= Nettoverkaufspreis (NVP)}} \\
+	\hline
+	\multicolumn{3}{|l|}{+ Umsatzsteuer} \\
+	\hline\hline
+	\multicolumn{3}{|l|}{\textbf{= Bruttoverkaufspreis (BVP)}} \\
+	\hline
+\end{tabularx} \\
+\cite[Quelle: In Anlehnung an][S. 4]{Beckert.2012}
+\end{table}
+
+%\clearpage % hiermit werden alle Bilder Tabellen ausgeworfen
+
+\subsection{Biblatex}
+\subsubsection{Erklärung}
+Von den vielen verfügbaren Literatur-Paketen habe ich mich für Biblatex entschieden. Die Anforderungen der FOM sollten hiermit erfüllt sein. Ich habe bisher nur Einträge \enquote{@book} getestet. Wie immer steckt der Teufel hier im Detail und es wird sich später herausstellen, ob Biblatex eine gute Wahl war. Die Anpassungen hierfür liegen unter skripte/modsBiblatex. Ich verwende das Backend Biber, welches bib-Dateien in UTF-8 verarbeiten kann.
+
+In der für den Leitfaden 2018 aktualisierten Version sind außerdem Beispiele für \enquote{online},\footcite[Vgl.][]{website:angular:aboutAngular} also Webseiten, und \enquote{article},\footcite[Vgl.][S. 140]{Decker2009} also wissenschaftliche Artikel, enthalten.
+
+Laut Leitfaden sollen maximal 3 Autoren genannt werden und danach mit
+\enquote{et. al.} bzw. \enquote{u.a.} ergänzt werden. Damit im Literaturverzeichnis auch nur max.
+3 Autoren stehen, muss man beim Füllen der literatur.bib-Datei darauf achten auch nur 3
+einzutragen. Weitere Autoren kann man einfach mit \enquote{and others} ergänzen.
+Siehe Eintrag für \enquote{Balzert.2008}. Zitiert man dann diese Werk, werden auch in
+der Fussnote alle Autoren korrekt genannt wie in dieser
+Fußnote\footcite[Vgl.][S. 1]{Balzert.2008} zu sehen ist.
+
+Hat man dagegen mehr als 3 Autoren in der bib-Datei hinterlegt, stehen im
+Literaturverzeichnis alle drin. In der Fussnote dagegen, steht nur
+einer\footcite[Vgl.][S. 1]{Balzert2.2008}, was dem Leitfaden widerspricht.
+
+Die Anzahl von 3 wird übrigens über die Option \enquote{maxcitenames=3} des
+biblatex-Packages gesetzt. Man muss selbst schauen, dass die Anzahl der Autoren
+in den Bib-Dateien mit der Optionseinstellung übereinstimmt.
+
+\subsubsection{Beispielfußnoten}
+Diese Fussnote soll zeigen, wie mit einem \enquote{von} vor dem Namen des Autors
+umgegangen wird\footcite[Vgl.][S. 1]{Lucke2018}. Man muss für die korrekte
+Sortierung eines solchens Namens im Literaturverzeichnis einen \enquote{sortkey}
+setzen.
+
+Diese Fussnote soll zeigen, wie mit einer Online-Quelle ohne Jahresangabe
+umgegangen wird\footcite[Vgl.][]{Belastingdienst}.
+
+Diese Fußnote\footcite[Vgl.][S.1]{Beckert.2012} ist nur dazu da zu zeigen, wie mit mehreren Quellen des selben Autors aus dem selben Jahr umgegangen wird, wenn das Stichwort gleich bleibt \footcite[Vgl.][S.2]{Beckert.2012.1} oder sich ändert\footcite[Vgl.][S.3]{Beckert.2012.2}. Laut Leitfaden sollte bei gleichem Autor, Jahr und Stichwort ein Buchstabe an die Jahreszahl gehangen werden. Zum Beispiel 2012a. 
+
+Die folgenden Fußnoten dienen dazu zu zeigen, dass die Nummern von zwei direkt aufeinanderfolgende Fußnoten mit Komma getrennt werden.\footcite[Vgl.][S.2]{Beckert.2012.1}\footcite[Vgl.][S. 1]{Lucke2018}
+\subsection{Abkürzungen}
+Abkürzungen werden mithilfe des Pakets Acronym eingebunden. Alle Abkürzungen sollten in der Datei acronyms.tex mithilfe des \begin{verbatim}
+	\acro
+\end{verbatim} Befehls festgelegt werden. Im Text werden diese dann mit \begin{verbatim}
+	\ac{Abkürzung}
+\end{verbatim} benutzt. Bei der ersten Verwendung einer Abkürzung wird der Begriff in beiden Formen dargestellt. So wie hier: \ac{WYSIWYG}. Nur wenn eine Abkürzung tatsächlich verwendet wird erscheint sie auch im Abkürzungsverzeichnis.
+
+Sollte es im Abkürzungsverzeichnis zu Anzeigefehlern kommen kann dies daher rühren, dass eine Abkürzung verwendet wird, die länger ist als \ac{WYSIWYG}. In diesem Fall müsst ihr in der Datei acronyms.tex den Parameter [WYSIWYG] durch eure längere Abkürzung ersetzen.
+
+\subsection{Formeln}
+Um eine Formel nach links aus zurichten muss sie zwischen \& und \& eingesetzt werden:
+
+\textbf{Formel 1: Erste Formel}
+\begin{flalign}
+   & L_P{=} 10lg \cdot \frac{P}{1 mW} &
+\end{flalign}
+\cite[Quelle: In Anlehnung an][S. 4]{Beckert.2012}
+
+
+Etwas mehr Text.
+
+Ansonsten wird sie mittig ausgerichtet test.
+% Mehr infos: http://www.ctex.org/documents/packages/math/amsldoc.pdf
+
+\textbf{Formel 2: Zweite Formel}
+\begin{flalign}
+   L_P{=} 10lg \cdot \frac{P}{1 mW}
+\end{flalign}
+\cite[Quelle: In Anlehnung an][S. 4]{Beckert.2012}
+
+\subsection{Symbole}
+% die folgenden Symbole haben nicht mit der Formel oben drüber zu tun
+Das hier ist ein definiertes Symbol: \symnz und das hier auch \AB . Symbole werden in der Datei Skripte symboldef.tex zentral definiert.
+
+\subsection{Glossar}
+Begriffserklärungen bzw. das \gls{glossar} wird mithilfe des Pakets \gls{glossaries} eingebunden. Alle Begriffe die erklärt werden sollen, sollten in der Datei glossar.tex mithilfe des \begin{verbatim}
+	\newglossaryentry
+\end{verbatim} Befehls festgelegt werden. Im Text werden diese dann mit \begin{verbatim}
+	\gls{Begriff}
+\end{verbatim} benutzt.
+
+
+\subsection{Listen und Aufzählungen}
+\subsubsection{Listen}
+\begin{itemize}
+\item ein wichtiger Punkt
+\item noch ein wichtiger Punkt
+\item und so weiter
+\end{itemize}
+\subsubsection{Aufzählungen}
+\begin{enumerate}
+\item Reihenfolge ist hier wichtig
+\item Dieser Punkt kommt nach dem ersten
+\item Da sollte jetzt eine 3 vorne stehen
+\end{enumerate}
+
+\paragraph{Tiefste Ebene 1}
+Dies ist die tiefste Gliederungsebene. Sollten doch mehr Ebenen benötigt werden, muss eine andere Dokumentenklasse verwendet werden.
+
+\paragraph{Tiefste Ebene 2}
+Der zweite Punkt in dieser Ebene ist zur Erinnerung daran, dass es nie nie niemals nur einen Unterpunkt geben darf.
+
+\subsection{Skript zum Kompilieren}
+Latex will ja bekanntlich in einer bestimmten Reihenfolge aufgerufen werden:
+\begin{lstlisting}
+lualatex document.tex
+biber document
+lualatex document.tex
+lualatex document.tex
+document.pdf
+\end{lstlisting}
+
+Dies ist der Inhalt der Batchdatei \enquote{compile.bat}.
+
+\subsection{PlantUML}
+
+\begin{lstlisting}
+\begin{plantuml}
+@startuml
+Class01 <|-- Class02
+Class03 *-- Class04
+Class05 o-- Class06
+Class07 .. Class08
+Class09 -- Class10
+@enduml
+\end{plantuml}
+\end{lstlisting}
+
+
+
+
+
+% \input{kapitel/fazit/fazit}
+\section{Fazit}
+Wünsche Euch allen viel Erfolg für das 7. Semester und bei der Erstellung der Thesis. Über Anregungen und Verbesserung an dieser Vorlage würde ich mich sehr freuen. 
+
+% haenno-apa6-slim: End
+
+% haenno-apa6-slim: Start
+
+\subsubsection{APA Richtlinien}
+
+Einige Doeznten verlagen die Zitierungen und das Literaturverzeichnis nach den 
+ APA Richtlininen. Daher nun ein ganzer Block an Test-Zitaten. \\
+
+Varianten:\\
+\\
+Ein Autor: \\
+erste Nennung: Mit Parencite \parencite{Beckert1}, und textcite \textcite{Beckert1} sowie citeauthor \citeauthor{Beckert1} und citeyear \citeyear{Beckert1}. \\
+zweite Nennung: Mit Parencite \parencite{Beckert1}, und textcite \textcite{Beckert1} sowie citeauthor \citeauthor{Beckert1} und citeyear \citeyear{Beckert1}. \\
+\\
+Zwei Autoren: \\
+erste Nennung: Mit Parencite \parencite{Tanenbaum2}, und textcite \textcite{Tanenbaum2} sowie citeauthor \citeauthor{Tanenbaum2} und citeyear \citeyear{Tanenbaum2}. \\
+zweite Nennung:  Mit Parencite \parencite{Tanenbaum2}, und textcite \textcite{Tanenbaum2} sowie citeauthor \citeauthor{Tanenbaum2} und citeyear \citeyear{Tanenbaum2}. \\
+\\
+Drei  Autoren: \\
+erste Nennung: Mit Parencite \parencite{Beckert3}, und textcite \textcite{Beckert3} sowie citeauthor \citeauthor{Beckert3} und citeyear \citeyear{Beckert3}. \\
+zweite Nennung: Mit Parencite \parencite{Beckert3}, und textcite \textcite{Beckert3} sowie citeauthor \citeauthor{Beckert3} und citeyear \citeyear{Beckert3}. \\
+\\
+Fünf  Autoren: \\
+erste Nennung: Mit Parencite \parencite{Mueller5}, und textcite \textcite{Mueller5} sowie citeauthor \citeauthor{Mueller5} und citeyear \citeyear{Mueller5}. \\
+zweite Nennung: Mit Parencite \parencite{Mueller5}, und textcite \textcite{Mueller5} sowie citeauthor \citeauthor{Mueller5} und citeyear \citeyear{Mueller5}. \\
+\\
+Sechs  Autoren: \\
+erste Nennung: Mit Parencite \parencite{Schmidt6}, und textcite \textcite{Schmidt6} sowie citeauthor \citeauthor{Schmidt6} und citeyear \citeyear{Schmidt6}. \\
+zweite Nennung: Mit Parencite \parencite{Schmidt6}, und textcite \textcite{Schmidt6} sowie citeauthor \citeauthor{Schmidt6} und citeyear \citeyear{Schmidt6}. \\
+\\
+Sieben Autoren: \\
+erste Nennung: Mit Parencite \parencite{Balzert7}, und textcite \textcite{Balzert7} sowie citeauthor \citeauthor{Balzert7} und citeyear \citeyear{Balzert7}. \\
+zweite Nennung: Mit Parencite \parencite{Balzert7}, und textcite \textcite{Balzert7} sowie citeauthor \citeauthor{Balzert7} und citeyear \citeyear{Balzert7}. \\
+\\
+Abschließend noch mehrere Quellen \parencite{Beckert3,Mueller5,Beckert1}.
+
+% haenno-apa6-slim: End
+%-----------------------------------
+% Apendix / Anhang
+%-----------------------------------
+\newpage
+\section*{\AppendixName} %Überschrift "Anhang", ohne Nummerierung
+\addcontentsline{toc}{section}{\AppendixName} %Den Anhang ohne Nummer zum Inhaltsverzeichnis hinzufügen
+
+\begin{appendices}
+% Nachfolgende Änderungen erfolgten aufgrund von Issue 163
+\makeatletter
+\renewcommand\@seccntformat[1]{\csname the#1\endcsname:\quad}
+\makeatother
+\addtocontents{toc}{\protect\setcounter{tocdepth}{0}} %
+	\renewcommand{\thesection}{\AppendixName\ \arabic{section}}
+	\renewcommand\thesubsection{\AppendixName\ \arabic{section}.\arabic{subsection}}
+	% haenno-apa6-slim: Start
+	% \input{kapitel/anhang/anhang}
+
+	\section{Beispielanhang}\label{Beispielanhang}
+	Dieser Abschnitt dient nur dazu zu demonstrieren, wie ein Anhang aufgebaut seien kann.
+	\subsection{Weitere Gliederungsebene}
+	Auch eine zweite Gliederungsebene ist möglich.
+	\section{Bilder}
+	Auch mit Bildern.
+	Diese tauchen nicht im Abbildungsverzeichnis auf.
+	\begin{figure}[H]
+		\centering
+		\caption[]{Beispielbild}
+		\label{fig:Beispielbild}
+		\includegraphics[width=1\textwidth]{verzeichnisStruktur}
+	\end{figure}
+
+	% haenno-apa6-slim: End
+\end{appendices}
+\addtocontents{toc}{\protect\setcounter{tocdepth}{2}}
+
+%-----------------------------------
+% Literaturverzeichnis
+%-----------------------------------
+\newpage
+
+% Die folgende Zeile trägt ALLE Werke aus literatur.bib in das
+% Literaturverzeichnis ein, egal ob sie zietiert wurden oder nicht.
+% Der Befehl ist also nur zum Test der Skripte sinnvoll und muss bei echten
+% Arbeiten entfernt werden.
+%\nocite{*}
+
+%\addcontentsline{toc}{section}{Literatur}
+
+% Die folgenden beiden Befehle würden ab dem Literaturverzeichnis wieder eine
+% römische Seitennummerierung nutzen.
+% Das ist nach dem Leitfaden nicht zu tun. Dort steht nur dass 'sämtliche
+% Verzeichnisse VOR dem Textteil' römisch zu nummerieren sind. (vgl. S. 3)
+%\pagenumbering{Roman} %Zähler wieder römisch ausgeben
+%\setcounter{page}{4}  %Zähler manuell hochsetzen
+
+% Ausgabe des Literaturverzeichnisses
+
+% haenno-apa6-slim: Start
+
+% Im Literaturverzeichnis "und" wieder durch "&" ersetzen	
+\DeclareDelimFormat*{finalnamedelim}{\addspace\&\space}
+
+% Punkt hinter und vor der Jahreszahl entfernen	- Wichtig für Quell-Arten wie misc und online -- Sonst ein überflüssiger Punkt im LitVerz.
+	\renewbibmacro*{author}{%
+	\printtext{%
+	\ifnameundef{author}
+	{\usebibmacro{labeltitle}}
+	{\printnames[apaauthor][-\value{listtotal}]{author}%
+	\setunit*{\addspace}%
+	\printfield{nameaddon}%
+	\ifnameundef{with}
+	{}
+	{\setunit{}\addspace\mkbibparens{\printtext{\bibstring{with}\addspace}%
+	\printnames[apaauthor][-\value{listtotal}]{with}}
+	\setunit*{\addspace}}}%
+	% \newunit\newblock%
+	\usebibmacro{labelyear+extradate}}}
+
+% haenno-apa6-slim: End
+
+% Keine Trennung der Werke im Literaturverzeichnis nach ihrer Art
+% (Online/nicht-Online)
+%\begin{RaggedRight}
+%\printbibliography
+%\end{RaggedRight}
+
+% Alternative Darstellung, die laut Leitfaden genutzt werden sollte.
+% Dazu die Zeilen auskommentieren und folgenden code verwenden:
+
+% Literaturverzeichnis getrennt nach Nicht-Online-Werken und Online-Werken
+% (Internetquellen).
+% Die Option nottype=online nimmt alles, was kein Online-Werk ist.
+% Die Option heading=bibintoc sorgt dafür, dass das Literaturverzeichnis im
+% Inhaltsverzeichnis steht.
+% Es ist übrigens auch möglich mehrere type- bzw. nottype-Optionen anzugeben, um
+% noch weitere Arten von Zusammenfassungen eines Literaturverzeichnisse zu
+% erzeugen.
+% Beispiel: [type=book,type=article]
+\printbibliography[nottype=online,heading=bibintoc,title={\langde{Literaturverzeichnis}\langen{Bibliography}}]
+
+% neue Seite für Internetquellen-Verzeichnis
+\newpage
+
+% Laut Leitfaden 2018, S. 14, Fussnote 44 stehen die Internetquellen NICHT im
+% Inhaltsverzeichnis, sondern gehören zum Literaturverzeichnis.
+% Die Option heading=bibintoc würde die Internetquelle als eigenen Eintrag im
+% Inhaltsverzeicnis anzeigen.
+%\printbibliography[type=online,heading=bibintoc,title={\headingNameInternetSources}]
+\printbibliography[type=online,heading=subbibliography,title={\headingNameInternetSources}]
+
+% haenno-apa6-slim: Start
+% \input{kapitel/anhang/erklaerung}
+\newpage
+\pagenumbering{gobble} % Keine Seitenzahlen mehr
+
+%-----------------------------------
+% Ehrenwörtliche Erklärung
+%-----------------------------------
+\section*{%
+	\langde{Ehrenwörtliche Erklärung}
+	\langen{Declaration in lieu of oath}}
+\langde{Hiermit versichere ich, dass die vorliegende Arbeit von mir selbstständig und ohne unerlaubte Hilfe angefertigt worden ist, insbesondere dass ich alle Stellen, die wörtlich oder annähernd wörtlich aus Veröffentlichungen entnommen sind, durch Zitate als solche gekennzeichnet habe. Ich versichere auch, dass die von mir eingereichte schriftliche Version mit der digitalen Version übereinstimmt. Weiterhin erkläre ich, dass die Arbeit in gleicher oder ähnlicher Form noch keiner Prüfungsbehörde/Prüfungsstelle vorgelegen hat. Ich erkläre mich damit \textcolor{red}{einverstanden/nicht einverstanden}, dass die Arbeit der Öffentlichkeit zugänglich gemacht wird. Ich erkläre mich damit einverstanden, dass die Digitalversion dieser Arbeit zwecks Plagiatsprüfung auf die Server externer Anbieter hochgeladen werden darf. Die Plagiatsprüfung stellt keine Zurverfügungstellung für die Öffentlichkeit dar.}
+\langen{I hereby declare that I produced the submitted paper with no assistance from any other party and without the use of any unauthorized aids and, in particular, that I have marked as quotations all passages which are reproduced verbatim or near-verbatim from publications. Also, I declare that the submitted print version of this thesis is identical with its digital version. Further, I declare that this thesis has never been submitted before to any examination board in either its present form or in any other similar version. I herewith \textcolor{red}{agree/disagree} that this thesis may be published. I herewith consent that this thesis may be uploaded to the server of external contractors for the purpose of submitting it to the contractors’ plagiarism detection systems. Uploading this thesis for the purpose of submitting it to plagiarism detection systems is not a form of publication.}
+
+
+\par\medskip
+\par\medskip
+
+\vspace{5cm}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular*}{\textwidth}{c @{\extracolsep{\fill}} ccccc}
+		\myOrt, \today
+		&
+		% Hinterlege deine eingescannte Unterschrift im Verzeichnis /abbildungen und nenne sie unterschrift.png
+		% Bilder mit transparentem Hintergrund können teils zu Problemen führen
+		\includegraphics[width=0.35\textwidth]{unterschrift}\vspace*{-0.35cm}
+		\\
+		\rule[0.5ex]{12em}{0.55pt} & \rule[0.5ex]{12em}{0.55pt} \\
+		\langde{(Ort, Datum)}\langen{(Location, Date)} & \langde{(Eigenhändige Unterschrift)}\langen{(handwritten signature)}
+		\\
+	\end{tabular*} \\
+\end{table}
+
+% haenno-apa6-slim: End
+\end{document}
